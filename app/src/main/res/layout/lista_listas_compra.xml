@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"> <!-- Un gris muy claro de fondo hace que las tarjetas blancas resalten -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_listas_compra"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_lista" />
+    <!-- La línea de arriba permite ver una vista previa de tus tarjetas en el editor -->
+
+    <!-- Opcional: Un botón flotante para añadir nuevas listas -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_lista"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:contentDescription="Nueva lista"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
+    <!-- ... dentro de tu ConstraintLayout de lista_listas_compra.xml ... -->
+
+    <include
+        android:id="@+id/bottom_bar"
+        layout="@layout/barra_inferior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Ajusta el RecyclerView para que termine donde empieza la barra -->
+
+
+    <!-- ... -->
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

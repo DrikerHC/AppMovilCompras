@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "690350312782",
+    "firebase_url": "https://appcompras-b0ef3-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "appcompras-b0ef3",
+    "storage_bucket": "appcompras-b0ef3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690350312782:android:b71fa8629ea2ff25e5e21f",
+        "android_client_info": {
+          "package_name": "com.example.appmovilescompras"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkec8m3HstymKg4WKHIygOUJGYbSujyF8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
