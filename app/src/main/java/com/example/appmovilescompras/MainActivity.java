@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,14 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity implements CompraAdapter.OnItemClickListener {
+// Cambiado: Hereda de BaseActivity para aplicar preferencias de idioma/tema
+public class MainActivity extends BaseActivity implements CompraAdapter.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private CompraAdapter adapter;
@@ -36,25 +34,29 @@ public class MainActivity extends AppCompatActivity implements CompraAdapter.OnI
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Bloqueo el modo oscuro
+        // 1. Bloquear modo oscuro
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        // 2. Ejecutar constructor del padre (aplica idioma y tema en BaseActivity)
         super.onCreate(savedInstanceState);
+
+        // 3. Cargar el Layout ANTES de buscar los botones
         setContentView(R.layout.lista_listas_compra);
 
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build();
+        // 4. Ahora ya podemos configurar el botón de Ajustes sin que de error
+        View btnAjustes = findViewById(R.id.btn_ir_ajustes);
+        if (btnAjustes != null) {
+            btnAjustes.setOnClickListener(v -> {
+                reproducirSonido();
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            });
+        }
 
-        soundPool = new SoundPool.Builder()
-                .setMaxStreams(5)
-                .setAudioAttributes(audioAttributes)
-                .build();
+        // Configuración de Sonido
+        configurarSonido();
 
-        // Cargo el sonido desde res/raw/sonidoboton
-        idSonidoClick = soundPool.load(this, R.raw.sonidoboton, 1);
-
+        // Responsive Insets (Ajuste barra de navegación)
         View mainView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements CompraAdapter.OnI
             return WindowInsetsCompat.CONSUMED;
         });
 
+        // Configuración de Firebase y RecyclerView
         comprasRef = FirebaseDatabase.getInstance().getReference("compras");
         recyclerView = findViewById(R.id.rv_listas_compra);
 
@@ -83,18 +86,34 @@ public class MainActivity extends AppCompatActivity implements CompraAdapter.OnI
         adapter = new CompraAdapter(options, this);
         recyclerView.setAdapter(adapter);
 
+        // Botón añadir compra compartida (FAB)
         findViewById(R.id.fab_add_lista).setOnClickListener(view -> {
             reproducirSonido();
             Intent intent = new Intent(MainActivity.this, CrearCompraActivity.class);
             startActivity(intent);
         });
 
+        // Botón para ir a compras privadas (SQLite)
         findViewById(R.id.btn_nav_privadas).setOnClickListener(v -> {
             reproducirSonido();
             Intent intentPrivadas = new Intent(MainActivity.this, ListaPrivadaActivity.class);
             intentPrivadas.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intentPrivadas);
         });
+    }
+
+    private void configurarSonido() {
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(5)
+                .setAudioAttributes(audioAttributes)
+                .build();
+
+        idSonidoClick = soundPool.load(this, R.raw.sonidoboton, 1);
     }
 
     private void reproducirSonido() {
@@ -119,20 +138,21 @@ public class MainActivity extends AppCompatActivity implements CompraAdapter.OnI
 
     @Override
     public void onItemLongClick(DataSnapshot itemSnapshot) {
-
         Compra compra = itemSnapshot.getValue(Compra.class);
-        String nombre = (compra != null) ? compra.getNombre() : "esta lista";
+        String nombre = (compra != null) ? compra.getNombre() : getString(R.string.esta_lista);
 
         new AlertDialog.Builder(this)
-                .setTitle("Eliminar lista")
-                .setMessage("¿Seguro que quieres borrar \"" + nombre + "\"?")
-                .setPositiveButton("Eliminar", (dialog, which) -> {
+                .setTitle(R.string.titulo_borrar_compartida)
+                .setMessage(getString(R.string.mensaje_borrar_generico, nombre))
+                .setPositiveButton(R.string.eliminar, (dialog, which) -> {
                     reproducirSonido();
                     itemSnapshot.getRef().removeValue()
-                            .addOnSuccessListener(aVoid -> Toast.makeText(this, "Eliminado", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(this, "Error al eliminar", Toast.LENGTH_SHORT).show());
+                            .addOnSuccessListener(aVoid ->
+                                    Toast.makeText(this, R.string.eliminado_ok, Toast.LENGTH_SHORT).show())
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(this, R.string.error_eliminar_firebase, Toast.LENGTH_SHORT).show());
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.boton_cancelar, null)
                 .show();
     }
 
@@ -146,6 +166,13 @@ public class MainActivity extends AppCompatActivity implements CompraAdapter.OnI
     protected void onStop() {
         super.onStop();
         if (adapter != null) adapter.stopListening();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        // Esto refresca la actividad al volver de Settings para aplicar cambios de idioma/tema
+        recreate();
     }
 
     @Override

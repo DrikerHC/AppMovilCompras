@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -17,21 +18,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Leche" />
 
+        <!-- CAMBIADO: Se quita el texto fijo para que el Adapter use el String traducido -->
         <TextView
             android:id="@+id/tv_cantidad_prod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cantidad: 1" />
+            tools:text="Cantidad: 2" />
     </LinearLayout>
 
+    <!-- CAMBIADO: Usando @string/eliminar para accesibilidad -->
     <ImageButton
         android:id="@+id/btn_eliminar_prod"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@android:drawable/ic_menu_delete"
-        android:contentDescription="Eliminar" />
+        android:contentDescription="@string/eliminar" />
 
 </LinearLayout>

@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Shopping App</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="titulo_selector_color">Selecciona un color</string>
+    <string name="color_seleccionado">Color seleccionat</string>
+    <string name="error_campos_vacios">Omple tots els camps</string>
+    <string name="lista_guardada">Llista desada</string>
+    <string name="error_guardar">Error en desar</string>
+
+    <!-- Noms dels colors -->
+    <string name="color_rojo">Vermell</string>
+    <string name="color_azul">Blau</string>
+    <string name="color_verde">Verd</string>
+    <string name="color_amarillo">Groc</string>
+    <string name="color_naranja">Taronja</string>
+    <string name="color_rosa">Rosa</string>
+    <string name="color_morado">Lila</string>
+    <string name="lista_privada_guardada">Llista privada desada</string>
+    <string name="error_guardar_privada">Error en desar la llista</string>
+    <string name="seleccionar_imagen">Seleccionar imatge</string>
+    <string name="error_abrir_lista">Error en obrir la llista</string>
+    <string name="boton_añadir">Afegir</string>
+    <string name="boton_cancelar">Cancel·lar</string>
+    <string name="producto_añadido">Producte afegit</string>
+    <string name="error_guardar_producto">Error en desar</string>
+    <string name="confirmar_borrado">Segur que vols eliminar aquest producte?</string>
+    <string name="titulo_borrar_lista">Eliminar llista privada</string>
+    <string name="mensaje_borrar_lista">Segur que vols eliminar \"%1$s\"?</string>
+    <string name="lista_eliminada">Llista eliminada</string>
+    <string name="titulo_borrar_compartida">Eliminar llista compartida</string>
+    <string name="mensaje_borrar_generico">Segur que vols eliminar \"%1$s\"?</string>
+    <string name="eliminado_ok">Eliminat correctament</string>
+    <string name="error_eliminar_firebase">Error en eliminar del núvol</string>
+    <string name="esta_lista">aquesta llista</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
+    <string name="ajustes">Configuració</string>
+    <string name="pref_idioma">Idioma</string>
+    <string name="pref_color">Color del tema</string>
+    <string name="pref_notificaciones">Activar notificacions</string>
+    <string name="pref_letra">Mida de la lletra</string>
+    <string name="letra_pequeña">Petita</string>
+    <string name="letra_normal">Normal</string>
+    <string name="letra_grande">Gran</string>
+    <string name="boton_añadir_producto">AÑADIR PRODUCTO</string>
+    <string name="hint_nombre_producto">Nombre del producto</string>
+    <string name="hint_cantidad">Cantidad</string>
+    <string name="boton_guardar">Guardar</string>
+    <string name="volver">Volver</string>
+    <string name="guardar_ajustes">Desar i aplicar</string>
+    <string name="cantidad_con_numero">Quantitat: %1$d</string>
+    <string name="eliminar_producto">Eliminar producte</string>
+    <string name="confirmar_eliminar_prod">Vols treure \"%1$s\" de la llista?</string>
+    <string name="error_eliminar">Error en eliminar</string>
+</resources>

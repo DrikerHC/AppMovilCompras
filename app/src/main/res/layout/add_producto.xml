@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp">
@@ -7,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Añadir Producto"
+        android:text="@string/boton_añadir_producto"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginBottom="10dp"/>
@@ -16,13 +17,13 @@
         android:id="@+id/etNombreProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre (ej. Leche)"/>
+        android:hint="@string/hint_nombre_producto"/>
 
     <EditText
         android:id="@+id/etCantidadProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cantidad (ej. 2)"
+        android:hint="@string/hint_cantidad"
         android:inputType="number"
         android:layout_marginTop="10dp"/>
 

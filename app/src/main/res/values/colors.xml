@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Colores para el Tema Rojo -->
+    <color name="rojo_primary">#D32F2F</color>
+    <color name="rojo_primary_dark">#9A0007</color>
+    <color name="rojo_accent">#FF5252</color>
+
+    <!-- Colores para el Tema Verde -->
+    <color name="verde_primary">#388E3C</color>
+    <color name="verde_primary_dark">#005005</color>
+    <color name="verde_accent">#8BC34A</color>
 </resources>

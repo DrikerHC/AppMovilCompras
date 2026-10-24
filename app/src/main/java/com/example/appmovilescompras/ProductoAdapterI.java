@@ -1,5 +1,6 @@
 package com.example.appmovilescompras;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.TextView;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -36,13 +38,27 @@ public class ProductoAdapterI extends RecyclerView.Adapter<ProductoAdapterI.Prod
     @Override
     public void onBindViewHolder(@NonNull ProductoViewHolder holder, int position) {
         Producto producto = productos.get(position);
-        holder.txtNombre.setText(producto.getNombre());
-        holder.txtCantidad.setText("Cantidad: " + producto.getCantidad());
+        Context context = holder.itemView.getContext();
 
+        // 1. Nombre del producto
+        holder.txtNombre.setText(producto.getNombre());
+
+        // 2. Cantidad adaptada a Idiomas (Responsive)
+        holder.txtCantidad.setText(context.getString(R.string.cantidad_con_numero, producto.getCantidad()));
+
+        // 3. Botón Borrar con Diálogo de Confirmación (Multi-idioma)
         holder.btnBorrar.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onItemDelete(producto, position);
-            }
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.eliminar_producto)
+                    .setMessage(context.getString(R.string.confirmar_eliminar_prod, producto.getNombre()))
+                    .setPositiveButton(R.string.si, (dialog, which) -> {
+                        // Solo si el usuario confirma, llamamos al listener
+                        if (listener != null) {
+                            listener.onItemDelete(producto, holder.getBindingAdapterPosition());
+                        }
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
         });
     }
 
@@ -50,7 +66,7 @@ public class ProductoAdapterI extends RecyclerView.Adapter<ProductoAdapterI.Prod
     public int getItemCount() {
         return productos.size();
     }
-    
+
     public void setProductos(List<Producto> lista) {
         productos = lista;
         notifyDataSetChanged();

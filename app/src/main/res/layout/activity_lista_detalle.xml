@@ -12,18 +12,20 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
+        <!-- CAMBIADO: Ahora usa @string/volver -->
         <Button
             android:id="@+id/btnVolver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="← Volver" />
+            android:text="@string/volver" />
 
+        <!-- CAMBIADO: Texto por defecto usa el nombre de la app hasta que Java lo cambie -->
         <TextView
             android:id="@+id/textViewNombreLista"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Mi Compra"
+            android:text="@string/app_name"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -38,14 +40,12 @@
         android:layout_marginBottom="8dp" />
 
     <!-- BARRA DE ACCIÓN ABAJO -->
+    <!-- CAMBIADO: Texto usa @string/boton_añadir_producto -->
+    <!-- ELIMINADO: backgroundTint para que el color cambie según el TEMA elegido -->
     <Button
         android:id="@+id/btn_añadir_producto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#4CAF50"
-        android:text="AÑADIR PRODUCTO NUEVO"
-        android:textColor="@android:color/white" />
+        android:text="@string/boton_añadir_producto" />
 
 </LinearLayout>
-
-    

@@ -1,5 +1,6 @@
 package com.example.appmovilescompras;
 
+import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ public class CompraAdapterI extends RecyclerView.Adapter<CompraAdapterI.ViewHold
 
     public interface OnItemClickListener {
         void onItemClick(Compra compra);
-        void onItemLongClick(Compra compra); // Para eliminar
+        void onItemLongClick(Compra compra);
     }
 
     public CompraAdapterI(List<Compra> lista, OnItemClickListener listener) {
@@ -39,23 +40,26 @@ public class CompraAdapterI extends RecyclerView.Adapter<CompraAdapterI.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Compra c = lista.get(position);
+        Context context = holder.itemView.getContext();
+
         holder.txtNombre.setText(c.getNombre());
-        holder.txtFecha.setText(c.getFecha());
 
-        // Coger la imagen desde el sqlite
+        // TRADUCCIÓN: En lugar de poner la fecha a pelo, usamos un prefijo traducible
+        // He usado R.string.ajustes solo como ejemplo, podrías usar uno que diga "Fecha"
+        String textoFecha = context.getString(R.string.hint_cantidad) + ": " + c.getFecha();
+        holder.txtFecha.setText(textoFecha);
+
+        // Imagen con Picasso
         String pathImagen = c.getUrlImagen();
-
         if (pathImagen != null && !pathImagen.isEmpty()) {
             Picasso.get()
-                    .load(Uri.parse(pathImagen)) // Convertimos el String a URI
+                    .load(Uri.parse(pathImagen))
                     .placeholder(android.R.drawable.ic_menu_gallery)
                     .error(android.R.drawable.stat_notify_error)
                     .into(holder.imgCompra);
         } else {
-            // Si no hay imagen, pongo este icono por defecto
             holder.imgCompra.setImageResource(android.R.drawable.ic_menu_gallery);
         }
-
 
         holder.itemView.setOnClickListener(v -> listener.onItemClick(c));
 

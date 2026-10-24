@@ -1,9 +1,46 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.AppMovilesCompras" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- 1. TEMA BASE: Lo sincronizamos para que sea compatible con MaterialComponents -->
+    <style name="Base.Theme.AppMovilesCompras" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Esto asegura que los colores se hereden correctamente -->
+        <item name="colorPrimary">#2196F3</item>
     </style>
 
-    <style name="Theme.AppMovilesCompras" parent="Base.Theme.AppMovilesCompras" />
+    <!-- 2. TEMA AZUL (Por defecto) -->
+    <style name="Theme_AppMovilesCompras" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">#2196F3</item>
+        <item name="colorPrimaryVariant">#1976D2</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <!-- Color para botones y FAB -->
+        <item name="colorSecondary">#2196F3</item>
+        <item name="android:windowBackground">#F0F8FF</item>
+        <item name="android:textColorPrimary">#000000</item>
+    </style>
+
+    <!-- 3. TEMA ROJO -->
+    <style name="Theme_Rojo" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/rojo_primary</item>
+        <item name="colorPrimaryVariant">@color/rojo_primary_dark</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <!-- Esto obliga al FloatingActionButton a ser rojo -->
+        <item name="colorSecondary">@color/rojo_primary</item>
+        <item name="colorAccent">@color/rojo_accent</item>
+
+        <item name="android:windowBackground">#FFF5F5</item>
+        <!-- Usamos textColorPrimary para que el sistema lo aplique mejor -->
+        <item name="android:textColorPrimary">#7B0000</item>
+    </style>
+
+    <!-- 4. TEMA VERDE -->
+    <style name="Theme_Verde" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/verde_primary</item>
+        <item name="colorPrimaryVariant">@color/verde_primary_dark</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <!-- Esto obliga al FloatingActionButton a ser verde -->
+        <item name="colorSecondary">@color/verde_primary</item>
+        <item name="colorAccent">@color/verde_accent</item>
+
+        <item name="android:windowBackground">#F5FFF5</item>
+        <item name="android:textColorPrimary">#004D00</item>
+    </style>
 </resources>

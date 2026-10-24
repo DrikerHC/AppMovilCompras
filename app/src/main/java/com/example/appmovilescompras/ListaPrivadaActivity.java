@@ -1,15 +1,13 @@
 package com.example.appmovilescompras;
 
 import android.content.Intent;
-import android.media.AudioAttributes; // AÑADIDO
-import android.media.SoundPool;      // AÑADIDO
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ListaPrivadaActivity extends AppCompatActivity {
+public class ListaPrivadaActivity extends BaseActivity { // Hereda de BaseActivity para el tema
 
     private RecyclerView recyclerView;
     private CompraAdapterI adapter;
@@ -31,12 +29,12 @@ public class ListaPrivadaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Bloqueo el modo oscuro otra vez
+        // El tema se aplica automáticamente gracias a BaseActivity.onCreate
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_listas_compra);
 
+        // Configuración de Sonido
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -47,14 +45,21 @@ public class ListaPrivadaActivity extends AppCompatActivity {
                 .setAudioAttributes(audioAttributes)
                 .build();
 
-        // Cargar los sonidos desde res/raw/sonidoboton
         idSonidoClick = soundPool.load(this, R.raw.sonidoboton, 1);
 
+        // Ajuste Responsive para barras de sistema
         View mainView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
             return WindowInsetsCompat.CONSUMED;
+        });
+
+        // --- BOTÓN DE AJUSTES (AÑADIDO) ---
+        findViewById(R.id.btn_ir_ajustes).setOnClickListener(v -> {
+            reproducirSonido();
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         });
 
         dbHelper = new DBHelper(this);
@@ -97,27 +102,27 @@ public class ListaPrivadaActivity extends AppCompatActivity {
     }
 
     private void reproducirSonido() {
-        if (idSonidoClick != 0) {
+        if (idSonidoClick != 0 && soundPool != null) {
             soundPool.play(idSonidoClick, 1, 1, 0, 0, 1);
         }
     }
 
     private void mostrarDialogoEliminar(Compra compra) {
         new AlertDialog.Builder(this)
-                .setTitle("Eliminar lista privada")
-                .setMessage("¿Seguro que quieres borrar \"" + compra.getNombre() + "\"?")
-                .setPositiveButton("Eliminar", (dialog, which) -> {
+                .setTitle(R.string.titulo_borrar_lista)
+                .setMessage(getString(R.string.mensaje_borrar_lista, compra.getNombre()))
+                .setPositiveButton(R.string.eliminar, (dialog, which) -> {
                     reproducirSonido();
                     boolean eliminado = dbHelper.deleteLista((int) compra.getId());
                     if (eliminado) {
                         listasPrivadas.remove(compra);
                         adapter.notifyDataSetChanged();
-                        Toast.makeText(this, "Lista eliminada", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.lista_eliminada, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Error al eliminar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.error_eliminar, Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.boton_cancelar, null)
                 .show();
     }
 
@@ -135,7 +140,6 @@ public class ListaPrivadaActivity extends AppCompatActivity {
         }
     }
 
-    // Libero la memoria del soundPool para que no se acumule
     @Override
     protected void onDestroy() {
         super.onDestroy();

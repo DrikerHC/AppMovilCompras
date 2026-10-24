@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,40 +22,37 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class ListaDetalleActivity extends AppCompatActivity {
+// CAMBIADO: Ahora hereda de BaseActivity
+public class ListaDetalleActivity extends BaseActivity {
 
     private ProductoAdapter adapter;
     private DatabaseReference productosRef;
-
     private SoundPool soundPool;
     private int idSonidoClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Bloquear modo oscuro
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        // BaseActivity aplicará el idioma y el tema aquí
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_detalle);
 
         configurarSonido();
 
-        // Esto de aqui es simplemente porque en algunos moviles se superpone la barra inferior del propio telefono con la de la app,
-        // y entonces no se puede usar bien
+        // Configuración de Insets (pantalla completa)
         View mainView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Aplico padding abajo para que el botón no se pegue a la barra de navegación
             v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
             return WindowInsetsCompat.CONSUMED;
         });
 
-        // Se recogen los datos
         String listaKey = getIntent().getStringExtra("LISTA_KEY");
         String nombreLista = getIntent().getStringExtra("NOMBRE_LISTA");
 
         if (listaKey == null) {
-            Toast.makeText(this, "Error al abrir la lista", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_abrir_lista, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -66,14 +62,12 @@ public class ListaDetalleActivity extends AppCompatActivity {
             tvTitulo.setText(nombreLista);
         }
 
+        // Botón Volver
         View btnVolver = findViewById(R.id.btnVolver);
         if (btnVolver != null) {
             btnVolver.setOnClickListener(v -> {
                 reproducirSonido();
-                Intent intent = new Intent(ListaDetalleActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                finish(); // Simplemente cerramos para volver atrás
             });
         }
 
@@ -81,6 +75,7 @@ public class ListaDetalleActivity extends AppCompatActivity {
                 .child(listaKey)
                 .child("productos");
 
+        // Botón Añadir Producto
         View btnAdd = findViewById(R.id.btn_añadir_producto);
         if (btnAdd != null) {
             btnAdd.setOnClickListener(v -> {
@@ -89,14 +84,13 @@ public class ListaDetalleActivity extends AppCompatActivity {
             });
         }
 
+        // RecyclerView
         RecyclerView rv = findViewById(R.id.recyclerViewProductos);
         if (rv != null) {
             rv.setLayoutManager(new LinearLayoutManager(this));
-
             FirebaseRecyclerOptions<Producto> options = new FirebaseRecyclerOptions.Builder<Producto>()
                     .setQuery(productosRef, Producto.class)
                     .build();
-
             adapter = new ProductoAdapter(options);
             rv.setAdapter(adapter);
         }
@@ -111,7 +105,7 @@ public class ListaDetalleActivity extends AppCompatActivity {
         EditText etCantidad = v.findViewById(R.id.etCantidadProducto);
 
         builder.setView(v)
-                .setPositiveButton("Añadir", (dialog, which) -> {
+                .setPositiveButton(R.string.boton_añadir, (dialog, which) -> {
                     reproducirSonido();
                     String nombre = etNombre.getText().toString().trim();
                     String cantidadStr = etCantidad.getText().toString().trim();
@@ -120,13 +114,13 @@ public class ListaDetalleActivity extends AppCompatActivity {
                         int cantidad = Integer.parseInt(cantidadStr);
                         Producto nuevo = new Producto(nombre, cantidad);
                         productosRef.push().setValue(nuevo)
-                                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Producto añadido", Toast.LENGTH_SHORT).show())
-                                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show());
+                                .addOnSuccessListener(aVoid -> Toast.makeText(this, R.string.producto_añadido, Toast.LENGTH_SHORT).show())
+                                .addOnFailureListener(e -> Toast.makeText(this, R.string.error_guardar_producto, Toast.LENGTH_SHORT).show());
                     } else {
-                        Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.error_campos_vacios, Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("Cancelar", (dialog, which) -> {
+                .setNegativeButton(R.string.boton_cancelar, (dialog, which) -> {
                     reproducirSonido();
                     dialog.dismiss();
                 });
@@ -134,7 +128,7 @@ public class ListaDetalleActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    // Las funciones para el sonido
+    // ... (El resto de métodos configurarSonido, onStart, etc. se mantienen igual)
     private void configurarSonido() {
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)

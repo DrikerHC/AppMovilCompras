@@ -6,32 +6,35 @@
     android:layout_height="match_parent"
     android:padding="20dp">
 
+    <!-- CAMBIADO: Usando app_name o podrías usar un string nuevo como titulo_nueva_lista -->
     <TextView
         android:id="@+id/titulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nueva Lista de Compra"
+        android:text="@string/app_name"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- CAMBIADO: Usando hint_nombre_producto o similar -->
     <EditText
         android:id="@+id/et_nombre_lista"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:hint="Nombre de la lista"
+        android:hint="@string/hint_nombre_producto"
         app:layout_constraintTop_toBottomOf="@id/titulo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- CAMBIADO: Usando hint_cantidad o un nuevo string para fecha -->
     <EditText
         android:id="@+id/et_fecha_lista"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Fecha (dd/mm/yyyy)"
+        android:hint="@string/hint_cantidad"
         app:layout_constraintTop_toBottomOf="@id/et_nombre_lista"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -42,27 +45,29 @@
         android:layout_height="180dp"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
-        android:background="#DDDDDD"
+        android:contentDescription="@string/seleccionar_imagen"
         app:layout_constraintTop_toBottomOf="@id/et_fecha_lista"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- CAMBIADO: Usando @string/seleccionar_imagen -->
     <Button
         android:id="@+id/btn_elegir_imagen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Elegir imagen"
+        android:text="@string/seleccionar_imagen"
         app:layout_constraintTop_toBottomOf="@id/img_preview"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- CAMBIADO: Usando @string/boton_guardar -->
     <Button
         android:id="@+id/btn_guardar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Guardar lista"
+        android:text="@string/boton_guardar"
         app:layout_constraintTop_toBottomOf="@id/btn_elegir_imagen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

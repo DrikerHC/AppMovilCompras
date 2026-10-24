@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.Calendar;
 
-public class CrearCompraPrivadaActivity extends AppCompatActivity {
+public class CrearCompraPrivadaActivity extends BaseActivity {
 
     private static final int PICK_IMAGE = 1;
 
@@ -55,13 +55,13 @@ public class CrearCompraPrivadaActivity extends AppCompatActivity {
         // 2. Inicio el Sqlite
         dbHelper = new DBHelper(this);
 
-        etFecha.setFocusable(false); // Es para que no se habra el teclado
+        etFecha.setFocusable(false);
         etFecha.setOnClickListener(v -> {
             reproducirSonido();
             mostrarSelectorFecha();
         });
 
-        // 3. En este caso si que puedo meter una imagen porque va a la BD de sqlite
+        // 3. Abrir galería
         btnElegirImagen.setOnClickListener(v -> {
             reproducirSonido();
             abrirGaleria();
@@ -81,7 +81,6 @@ public class CrearCompraPrivadaActivity extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year, monthOfYear, dayOfMonth) -> {
-                    // Formato Día/Mes/Año
                     String fechaSeleccionada = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                     etFecha.setText(fechaSeleccionada);
                 }, año, mes, dia);
@@ -89,11 +88,11 @@ public class CrearCompraPrivadaActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    //Esta funcion te abre la galeria para que puedas elegir una de las fotos
     private void abrirGaleria() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+        // Aquí podrías usar getString(R.string.seleccionar_imagen) si usaras createChooser
         startActivityForResult(intent, PICK_IMAGE);
     }
 
@@ -113,17 +112,20 @@ public class CrearCompraPrivadaActivity extends AppCompatActivity {
         String fecha = etFecha.getText().toString().trim();
 
         if (nombre.isEmpty() || fecha.isEmpty()) {
-            Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT).show();
+            // ADAPTADO: Usa el string de error de campos vacíos
+            Toast.makeText(this, R.string.error_campos_vacios, Toast.LENGTH_SHORT).show();
             return;
         }
 
         long id = dbHelper.addLista(nombre, fecha, imagePath);
 
         if (id != -1) {
-            Toast.makeText(this, "Lista privada guardada", Toast.LENGTH_SHORT).show();
+            // ADAPTADO: Mensaje de éxito de lista privada
+            Toast.makeText(this, R.string.lista_privada_guardada, Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(this, "Error al guardar la lista", Toast.LENGTH_SHORT).show();
+            // ADAPTADO: Mensaje de error al guardar en SQLite
+            Toast.makeText(this, R.string.error_guardar_privada, Toast.LENGTH_SHORT).show();
         }
     }
 
